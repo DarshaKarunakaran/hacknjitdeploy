@@ -10,17 +10,26 @@ api_key = os.getenv('API_KEY')
 app = Flask(__name__)
 
 def get_lat_long(city_name, state_code, country_code, API_key):
-    res = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city_name},{state_code},{country_code}&appid={API_key}').json()
-    if res:
-        latitude = res[0].get('lat')
-        longitude = res[0].get('lon')
-        return latitude, longitude 
-    else:
-        return None, None 
+    try:
+        res = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city_name},{state_code},{country_code}&appid={API_key}')
+        res.raise_for_status()  # Raise an error for bad responses
+        data = res.json()
+        if data:
+            latitude = data[0].get('lat')
+            longitude = data[0].get('lon')
+            return latitude, longitude 
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching latitude and longitude: {e}")
+    return None, None 
 
 def get_current_air_pollution(lat, lon, API_key):
-    res = requests.get(f'http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API_key}').json()
-    return res  
+    try:
+        res = requests.get(f'http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API_key}')
+        res.raise_for_status()  # Raise an error for bad responses
+        return res.json()  
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching air pollution data: {e}")
+        return None
 
 @app.route('/')
 def home():
@@ -38,11 +47,9 @@ def historical_data():
 def airquality_simulator():
     return render_template('airquality_simulator.html')
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/api_key')
 def get_api_key():
@@ -57,9 +64,9 @@ def get_data():
     lat, lon = get_lat_long(city, state, country, api_key)
     if lat is not None and lon is not None:
         pollution_data = get_current_air_pollution(lat, lon, api_key)
-        return jsonify(pollution_data) 
-    else:
-        return jsonify({'error': 'Location not found'}), 404
+        if pollution_data:
+            return jsonify(pollution_data) 
+    return jsonify({'error': 'Location not found or data retrieval failed'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
