@@ -8,13 +8,17 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     
     <style>
+        body {
+            background-color: black; /* Set the background color to black */
+            color: beige; /* Set default text color to beige */
+        }
+
         #typing-animation-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             font-size: 1.2em;
-            color: beige;
             margin: 20px 0;
             white-space: nowrap;
             overflow: hidden;
@@ -53,15 +57,11 @@
         }
     </style>
 </head>
-<audio autoplay loop playsinline id="background-audio">
-    <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
-    Your browser does not support the audio tag.
-  </audio>
 <body>
-    <video autoplay loop muted playsinline id="background-video">
-        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <audio autoplay loop playsinline id="background-audio">
+        <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
 
     <header class="header">
         <h1 class="welcome">Welcome to the AQI Tracker</h1>
@@ -88,7 +88,7 @@
     </div>
 
     <footer>
-        <p> 2024 AQI Tracker.  Video Credits: youtube@TERAVIBE </p>
+        <p>2024 AQI Tracker. Video Credits: youtube@TERAVIBE</p>
     </footer>
 
     <script>
@@ -102,7 +102,8 @@
             window.location.href = "{{ url_for('airquality_simulator') }}";
         };
         document.getElementById("About Us").onclick = function() {
-            window.location.href = "{{ url_for('about') }}";        };
+            window.location.href = "{{ url_for('about') }}";        
+        };
     </script>
 </body>
 </html>
