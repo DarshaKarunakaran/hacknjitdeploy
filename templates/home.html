@@ -8,6 +8,24 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     
     <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        #background-video {
+            position: fixed; /* Makes the video fixed in the background */
+            top: 50%; 
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto; 
+            height: auto;
+            z-index: -1; /* Sends the video behind other content */
+            transform: translate(-50%, -50%); /* Center the video */
+        }
+
+        /* Other styles remain unchanged */
         #typing-animation-container {
             display: flex;
             flex-direction: column;
@@ -58,10 +76,6 @@
         <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-    <audio autoplay loop playsinline id="background-audio">
-        <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
-        Your browser does not support the audio tag.
-      </audio>
 
     <header class="header">
         <h1 class="welcome">Welcome to the AQI Tracker</h1>
@@ -76,8 +90,8 @@
         <div class="button-container">
             <button id="viewMap">Explore Interactive Map</button>
             <button id="viewHistorical">View Historical Data</button>
-            <button id="viewSimulator">AirQuality Simulator</button>
-            <button id="About Us">About US</button> 
+            <button id="viewSimulator">Air Quality Simulator</button>
+            <button id="About Us">About Us</button> 
         </div>
     </main>
 
@@ -88,7 +102,7 @@
     </div>
 
     <footer>
-        <p> 2024 AQI Tracker.  Video Credits: youtube@TERAVIBE </p>
+        <p>2024 AQI Tracker. Video Credits: youtube@TERAVIBE</p>
     </footer>
 
     <script>
@@ -102,7 +116,8 @@
             window.location.href = "{{ url_for('airquality_simulator') }}";
         };
         document.getElementById("About Us").onclick = function() {
-            window.location.href = "{{ url_for('about') }}";        };
+            window.location.href = "{{ url_for('about') }}";        
+        };
     </script>
 </body>
 </html>
